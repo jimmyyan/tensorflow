@@ -181,8 +181,12 @@ Status HadoopFileSystem::Connect(StringPiece fname, hdfsFS* fs) {
     // configuration files). See:
     // https://github.com/tensorflow/tensorflow/blob/v1.0.0/third_party/hadoop/hdfs.h#L259
     nn = "default";
-  } else if (scheme == "har") {
-    TF_RETURN_IF_ERROR(SplitArchiveNameAndPath(path, nn));
+  } else if (scheme == "ofs") {
+      size_t length = path.size();
+      StringPiece ofsPath = fname.remove_suffix(length);
+      nn = string(ofsPath)
+  }else if (scheme == "har") {
+      TF_RETURN_IF_ERROR(SplitArchiveNameAndPath(path, nn));
   } else {
     if (nn.empty()) {
       nn = "default";
@@ -587,5 +591,5 @@ Status HadoopFileSystem::Stat(const string& fname, TransactionToken* token,
 REGISTER_LEGACY_FILE_SYSTEM("hdfs", HadoopFileSystem);
 REGISTER_LEGACY_FILE_SYSTEM("viewfs", HadoopFileSystem);
 REGISTER_LEGACY_FILE_SYSTEM("har", HadoopFileSystem);
-
+REGISTER_LEGACY_FILE_SYSTEM("ofs", HadoopFileSystem);
 }  // namespace tensorflow

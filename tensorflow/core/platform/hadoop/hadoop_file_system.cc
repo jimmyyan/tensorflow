@@ -183,8 +183,9 @@ Status HadoopFileSystem::Connect(StringPiece fname, hdfsFS* fs) {
     nn = "default";
   } else if (scheme == "ofs") {
       size_t length = path.size();
-      StringPiece ofsPath = fname.remove_suffix(length);
-      nn = string(ofsPath)
+      StringPiece ofsPath = fname;
+      ofsPath.remove_suffix(length);
+      nn = string(ofsPath);
   }else if (scheme == "har") {
       TF_RETURN_IF_ERROR(SplitArchiveNameAndPath(path, nn));
   } else {

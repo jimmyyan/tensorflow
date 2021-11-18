@@ -181,7 +181,7 @@ Status HadoopFileSystem::Connect(StringPiece fname, hdfsFS* fs) {
     // configuration files). See:
     // https://github.com/tensorflow/tensorflow/blob/v1.0.0/third_party/hadoop/hdfs.h#L259
     nn = "default";
-  } else if (scheme == "ofs") {
+  } else if (scheme == "ofs" || scheme == "cosn") {
       size_t length = path.size();
       StringPiece ofsPath = fname;
       ofsPath.remove_suffix(length);
@@ -593,4 +593,5 @@ REGISTER_LEGACY_FILE_SYSTEM("hdfs", HadoopFileSystem);
 REGISTER_LEGACY_FILE_SYSTEM("viewfs", HadoopFileSystem);
 REGISTER_LEGACY_FILE_SYSTEM("har", HadoopFileSystem);
 REGISTER_LEGACY_FILE_SYSTEM("ofs", HadoopFileSystem);
+REGISTER_LEGACY_FILE_SYSTEM("cosn", HadoopFileSystem);
 }  // namespace tensorflow
